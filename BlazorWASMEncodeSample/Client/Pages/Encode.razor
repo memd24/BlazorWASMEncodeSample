@@ -1,0 +1,29 @@
+﻿@page "/encode"
+@using Blazor.SubtleCrypto
+@inject ICryptoService _crypt
+@inject IJSRuntime JsRuntime;
+<PageTitle>Encode</PageTitle>
+
+<h1>Encode sample</h1>
+
+
+<label>Encoded:</label><b>@encode</b>
+<br />
+@if (encode != "")
+{
+    <label>Stored in localStorage</label>
+    <br />
+}
+
+<button class="btn btn-primary" @onclick="EncodeClick">Encode</button>
+
+@code {
+    private string encode = "";
+
+    private async Task EncodeClick()
+    {
+        var encPass = await _crypt.EncryptAsync("123qwe");
+        encode = encPass.Value;
+        await JsRuntime.InvokeVoidAsync("localStorage.setItem", "encoded", encode);
+    }
+}

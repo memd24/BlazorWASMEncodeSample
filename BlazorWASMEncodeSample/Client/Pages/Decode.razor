@@ -1,0 +1,23 @@
+﻿@page "/decode"
+
+<PageTitle>Decoded sample</PageTitle>
+
+@using Blazor.SubtleCrypto;
+@inject ICryptoService _crypt
+@inject IJSRuntime JsRuntime;
+
+<label>Encoded:</label><b>@encoded</b>
+<br />
+<label>Decoded:</label><b>@decoded</b>
+
+
+@code {
+     string encoded = "";
+     string decoded = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        encoded = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "encoded");
+        decoded = await _crypt.DecryptAsync(encoded);
+    }
+}
